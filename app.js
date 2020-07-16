@@ -7,7 +7,17 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-mongoose.connect('mongodb://localhost/bookAPI');
+if(process.env.MYTESTENV === 'Test'){
+    console.log(process.env.MYTESTENV);
+    console.log("we're in test mode");
+    mongoose.connect('mongodb://localhost/bookAPI-Test');
+}else{
+    console.log(process.env.MYTESTENV);
+    console.log("we're working with real data")
+    mongoose.connect('mongodb://localhost/bookAPI-prod');
+}
+
+
 
 const Book = require('./models/book-model');
 
@@ -20,8 +30,10 @@ app.use('/api', bookRouter);
 
 app.get('/',(req,res)=>{
     res.send('You are on my Api');
-})
+});
 
-app.listen(port, ()=>{
+app.server = app.listen(port, ()=>{
     console.log('server running at port ' + port);
-})
+});
+
+module.exports = app;

@@ -12,13 +12,15 @@ const bookController =(Book)=>{
       }
 
     const post = (req, res) => {
+      if(!req.body.title){
+        res.status(400);
+        return res.send('Title is required');
+      }
+
         const book = new Book(req.body);
-        book.save((err)=>{
-          if(err) return res.send(err);
-  
-          return res.status(201).json(book);
-        });
-        
+        book.save();
+        res.status(201)
+        return res.send(book);
       }
 
     return {get, post}
