@@ -16,11 +16,18 @@ const routes = (Book) => {
         req.book = book;
         return next();
       }
+      //if book doesn't exist
       res.sendStatus(404);
     });
   });
   bookRouter.route("/books/:bookId")
-    .get((req, res) => res.json(req.book))
+    .get((req, res) => {
+      const responseBook = JSON.parse(JSON.stringify(req.book));
+      responseBook.links = {
+        filterByThisGenre: encodeURI(`http://${req.headers.host}/api/books/?genre=${req.book.genre}`)
+      }
+      return res.json(responseBook);
+    })
     .put((req, res) => {
       const { book } = req;
       book.title = req.body.title;

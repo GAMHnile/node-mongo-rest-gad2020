@@ -1,11 +1,14 @@
+
 require('should');
 const request = require('supertest');
+process.env.MYTESTENV='Test';
+
 const app = require('../app');
 const agent = request.agent(app);
 const mongoose = require('mongoose');
 const Book = mongoose.model('Book');
 
-process.env.MYTESTENV='Test';
+
 
 
 describe('Books CRUD test', ()=>{

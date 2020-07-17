@@ -6,8 +6,21 @@ const bookController =(Book)=>{
         }
         Book.find(query, (err, books) => {
           if (err) return res.send(err);
-  
-          res.json(books);
+          
+          //remove mongoose schema bindings/restrictions and make new copy of books
+          const responseBooks = JSON.parse(JSON.stringify(books));
+          //add hypermedia to each book
+          responseBooks.map(book=>{
+            const newBook = book;
+            newBook.links={
+              findById: `http://${req.headers.host}/api/books/${book._id}`,
+              filterByThisGenre: encodeURI(`http://${req.headers.host}/api/books/?genre=${book.genre}`)
+            };
+            
+            return newBook;
+          }) 
+
+          res.json(responseBooks);
         });
       }
 

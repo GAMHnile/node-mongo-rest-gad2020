@@ -8,13 +8,11 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 if(process.env.MYTESTENV === 'Test'){
-    console.log(process.env.MYTESTENV);
+    console.log({env: process.env.MYTESTENV});
     console.log("we're in test mode");
     mongoose.connect('mongodb://localhost/bookAPI-Test');
 }else{
-    console.log(process.env.MYTESTENV);
-    console.log("we're working with real data")
-    mongoose.connect('mongodb://localhost/bookAPI-prod');
+    mongoose.connect('mongodb://localhost/bookAPI');
 }
 
 
